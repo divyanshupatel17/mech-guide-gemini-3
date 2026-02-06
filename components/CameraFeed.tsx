@@ -212,7 +212,7 @@ export default function CameraFeed({ onFrame, detections = [], isAnalyzing }: Ca
                         if (frame) onFrame(frame);
                     }}
                     disabled={isAnalyzing}
-                    className={`absolute bottom-4 right-4 flex items-center gap-2 px-5 py-2.5 rounded-xl font-medium transition-all duration-300 ${isAnalyzing
+                    className={`absolute bottom-4 right-4 flex items-center gap-2 px-4 py-2 md:px-5 md:py-2.5 rounded-xl font-medium transition-all duration-300 text-sm md:text-base ${isAnalyzing
                         ? "bg-blue-500/30 text-blue-200 cursor-not-allowed"
                         : "bg-gradient-to-r from-blue-500 to-purple-600 text-white hover:shadow-lg hover:shadow-blue-500/30 hover:scale-105 active:scale-95"
                         }`}

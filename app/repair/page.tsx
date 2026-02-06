@@ -60,10 +60,14 @@ export default function RepairPage() {
         }
     }, [repairSteps]);
 
+    const [activeTab, setActiveTab] = useState<"chat" | "steps">("chat");
+
+    // ... (keep existing effects)
+
     return (
-        <div className="flex flex-col h-screen overflow-hidden">
+        <div className="flex flex-col h-screen overflow-hidden bg-black text-white">
             {/* Header */}
-            <header className="glass fixed top-0 left-0 right-0 z-50 px-4 py-3 border-b border-white/5">
+            <header className="fixed top-0 left-0 right-0 z-50 px-4 py-3 border-b border-white/5 bg-black/50 backdrop-blur-md">
                 <div className="w-full max-w-[1920px] mx-auto flex items-center justify-between">
                     <Link href="/" className="flex items-center gap-2 text-gray-400 hover:text-white transition-colors group">
                         <ArrowLeft className="w-5 h-5 group-hover:-translate-x-1 transition-transform" />
@@ -72,7 +76,8 @@ export default function RepairPage() {
 
                     <div className="flex items-center gap-2 px-4 py-1.5 glass-button">
                         <Zap className="w-4 h-4 text-blue-400 fill-blue-400" />
-                        <span className="font-semibold text-sm tracking-wide">Repair Session</span>
+                        <span className="font-semibold text-sm tracking-wide hidden md:inline">Repair Session</span>
+                        <span className="font-semibold text-sm tracking-wide md:hidden">Repair</span>
                     </div>
 
                     <button className="p-2 rounded-lg hover:bg-white/10 transition-colors text-gray-400 hover:text-white">
@@ -82,109 +87,106 @@ export default function RepairPage() {
             </header>
 
             {/* Main Content */}
-            <main className="flex-1 pt-16 pb-4 px-4 h-full relative z-10">
-                <div className="w-full max-w-[1920px] mx-auto flex flex-col lg:grid lg:grid-cols-12 gap-4 h-full">
-                    {/* Left Column - Camera (Mobile: 45vh, Desktop: 8 cols) */}
-                    <div className="h-[45vh] lg:h-full lg:col-span-8 flex flex-col gap-4 min-h-0">
-                        <motion.div
-                            initial={{ opacity: 0, scale: 0.95 }}
-                            animate={{ opacity: 1, scale: 1 }}
-                            className="flex-1 relative rounded-2xl overflow-hidden glass-card shadow-2xl shadow-black/50"
-                        >
-                            <div className="absolute inset-0">
-                                <CameraFeed
-                                    onFrame={handleFrame}
-                                    detections={detections}
-                                    isAnalyzing={isAnalyzing}
-                                />
-                            </div>
-                        </motion.div>
+            <main className="flex-1 pt-16 pb-0 px-0 md:px-4 md:pb-4 h-full relative z-10">
+                <div className="w-full max-w-[1920px] mx-auto flex flex-col lg:grid lg:grid-cols-12 gap-0 lg:gap-4 h-full">
 
-                        {/* Diagnosis Card */}
+                    {/* Left Column - Camera */}
+                    {/* Mobile: Top Section (40%) | Desktop: Left Col (Full Height) */}
+                    <div className="h-[40vh] lg:h-full lg:col-span-8 flex flex-col min-h-0 relative">
+                        <div className="absolute inset-0 md:relative md:rounded-2xl overflow-hidden glass-card shadow-2xl shadow-black/50 mx-0 md:mx-0">
+                            <CameraFeed
+                                onFrame={handleFrame}
+                                detections={detections}
+                                isAnalyzing={isAnalyzing}
+                            />
+                        </div>
+
+                        {/* Mobile-Only Overlay Diagnosis (Compact) */}
                         <AnimatePresence>
                             {diagnosis && (
                                 <motion.div
-                                    initial={{ opacity: 0, y: 20 }}
+                                    initial={{ opacity: 0, y: -20 }}
                                     animate={{ opacity: 1, y: 0 }}
-                                    className="glass-card p-3 lg:p-5 border-l-4 border-l-blue-500 absolute lg:static top-4 left-4 right-4 z-20 lg:z-auto"
+                                    className="absolute top-4 left-4 right-4 z-20 md:hidden"
                                 >
-                                    <div className="flex items-start justify-between gap-4">
-                                        <div>
-                                            <h4 className="font-semibold mb-1 text-white flex items-center gap-2">
-                                                Diagnosis <span className="text-xs text-gray-500 font-normal uppercase tracking-wider">AI Analysis</span>
-                                            </h4>
-                                            <p className="text-gray-300 leading-relaxed text-sm line-clamp-2 lg:line-clamp-none">{diagnosis.summary}</p>
-                                        </div>
-                                        <div className="flex flex-col items-end gap-2">
-                                            <div className={`px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider ${diagnosis.severity === "critical" ? "bg-red-500/20 text-red-400 border border-red-500/30" :
-                                                diagnosis.severity === "high" ? "bg-orange-500/20 text-orange-400 border border-orange-500/30" :
-                                                    diagnosis.severity === "medium" ? "bg-yellow-500/20 text-yellow-400 border border-yellow-500/30" :
-                                                        "bg-green-500/20 text-green-400 border border-green-500/30"
+                                    <div className="glass-card p-3 border-l-4 border-l-blue-500 bg-black/80 backdrop-blur-xl">
+                                        <p className="text-white text-sm font-medium line-clamp-2">{diagnosis.summary}</p>
+                                    </div>
+                                </motion.div>
+                            )}
+                        </AnimatePresence>
+
+                        {/* Desktop Diagnosis Card (Below Camera or Overlay) - Hidden on Mobile to save space */}
+                        <div className="hidden lg:block absolute bottom-4 left-4 right-4 z-20">
+                            <AnimatePresence>
+                                {diagnosis && (
+                                    <motion.div
+                                        initial={{ opacity: 0, y: 20 }}
+                                        animate={{ opacity: 1, y: 0 }}
+                                        className="glass-card p-4 border-l-4 border-l-blue-500"
+                                    >
+                                        <div className="flex items-start justify-between gap-4">
+                                            <div>
+                                                <h4 className="font-semibold mb-1 text-white">Diagnosis</h4>
+                                                <p className="text-gray-300 text-sm">{diagnosis.summary}</p>
+                                            </div>
+                                            <div className={`px-3 py-1 rounded-full text-xs font-bold uppercase ${diagnosis.severity === "critical" ? "bg-red-500/20 text-red-400" : "bg-green-500/20 text-green-400"
                                                 }`}>
                                                 {diagnosis.severity}
                                             </div>
-                                            <div className="flex items-center gap-2 text-xs text-gray-500">
-                                                <div className="w-16 bg-white/10 rounded-full h-1.5">
-                                                    <div
-                                                        className="bg-blue-500 h-1.5 rounded-full"
-                                                        style={{ width: `${diagnosis.confidence * 100}%` }}
-                                                    />
-                                                </div>
-                                                <span>{Math.round(diagnosis.confidence * 100)}%</span>
-                                            </div>
                                         </div>
-                                    </div>
-                                </motion.div>
-                            )}
-                        </AnimatePresence>
-
-                        {/* Error Display */}
-                        <AnimatePresence>
-                            {error && (
-                                <motion.div
-                                    initial={{ opacity: 0, y: 10 }}
-                                    animate={{ opacity: 1, y: 0 }}
-                                    exit={{ opacity: 0, y: 10 }}
-                                    className="glass-card p-4 border-red-500/30 flex items-center gap-3 text-red-400 bg-red-500/5 absolute lg:static bottom-4 left-4 right-4 z-20 lg:z-auto"
-                                >
-                                    <AlertCircle className="w-5 h-5 flex-shrink-0" />
-                                    <div>
-                                        <p className="font-medium text-sm">System Alert</p>
-                                        <p className="text-xs opacity-70">{error}</p>
-                                    </div>
-                                </motion.div>
-                            )}
-                        </AnimatePresence>
+                                    </motion.div>
+                                )}
+                            </AnimatePresence>
+                        </div>
                     </div>
 
-                    {/* Right Column - Chat & Steps (Mobile: Remaining height, Desktop: 4 cols) */}
-                    <div className="flex-1 lg:h-full lg:col-span-4 flex flex-col gap-4 min-h-0 overflow-hidden">
-                        <motion.div
-                            initial={{ opacity: 0, x: 20 }}
-                            animate={{ opacity: 1, x: 0 }}
-                            className="flex-1 min-h-0"
-                        >
-                            <ChatPanel
-                                onSendMessage={handleSendMessage}
-                                voiceGuidance={voiceGuidance}
-                                isProcessing={isAnalyzing}
-                            />
-                        </motion.div>
+                    {/* Right Column / Bottom Section */}
+                    {/* Mobile: Tabs + Content (Flex-1) | Desktop: Sidebar (Full Height) */}
+                    <div className="flex-1 lg:h-full lg:col-span-4 flex flex-col min-h-0 bg-black/40 lg:bg-transparent backdrop-blur-lg lg:backdrop-blur-0 rounded-t-3xl lg:rounded-none border-t border-white/10 lg:border-t-0 -mt-4 lg:mt-0 pt-4 lg:pt-0 relative z-20">
 
-                        <motion.div
-                            initial={{ opacity: 0, x: 20 }}
-                            animate={{ opacity: 1, x: 0 }}
-                            transition={{ delay: 0.1 }}
-                            className="h-1/3 min-h-[150px] lg:min-h-[200px]"
-                        >
-                            <div className="h-full overflow-y-auto scrollbar-thin rounded-2xl">
-                                <RepairSteps
-                                    steps={repairSteps}
-                                    currentStep={currentStep}
-                                    onStepComplete={handleStepComplete}
-                                />
+                        {/* Mobile Tab Switcher */}
+                        <div className="flex items-center justify-center p-1 mx-6 mb-2 bg-white/5 rounded-xl border border-white/10 lg:hidden">
+                            <button
+                                onClick={() => setActiveTab("chat")}
+                                className={`flex-1 py-2 text-sm font-medium rounded-lg transition-all ${activeTab === "chat" ? "bg-blue-600 text-white shadow-lg" : "text-gray-400 hover:text-white"
+                                    }`}
+                            >
+                                AI Assistant
+                            </button>
+                            <button
+                                onClick={() => setActiveTab("steps")}
+                                className={`flex-1 py-2 text-sm font-medium rounded-lg transition-all ${activeTab === "steps" ? "bg-blue-600 text-white shadow-lg" : "text-gray-400 hover:text-white"
+                                    }`}
+                            >
+                                Repair Steps
+                            </button>
+                        </div>
+
+                        {/* Desktop: Show Both | Mobile: Show Active Tab */}
+                        <div className="flex-1 min-h-0 flex flex-col gap-4 overflow-hidden px-4 md:px-0 pb-4 md:pb-0">
+                            {/* Chat Panel */}
+                            <div className={`${activeTab === "chat" ? "flex" : "hidden"} lg:flex flex-1 min-h-0 flex-col`}>
+                                <div className="flex-1 relative rounded-2xl overflow-hidden glass-card">
+                                    <ChatPanel
+                                        onSendMessage={handleSendMessage}
+                                        voiceGuidance={voiceGuidance}
+                                        isProcessing={isAnalyzing}
+                                    />
+                                </div>
                             </div>
-                        </motion.div>
+
+                            {/* Repair Steps */}
+                            <div className={`${activeTab === "steps" ? "flex" : "hidden"} lg:flex lg:h-1/3 min-h-0 flex-col`}>
+                                <div className="h-full relative rounded-2xl overflow-hidden glass-card">
+                                    <RepairSteps
+                                        steps={repairSteps}
+                                        currentStep={currentStep}
+                                        onStepComplete={handleStepComplete}
+                                    />
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </main>

@@ -61,13 +61,18 @@ function parseResponse(response: string): string {
 }
 
 export default function ChatPanel({ onSendMessage, voiceGuidance, isProcessing }: ChatPanelProps) {
-    const [messages, setMessages] = useState<Message[]>([
-        {
-            role: "assistant",
-            content: "Hello! I'm MechGuide, your AI repair co-pilot. Point your camera at any machinery, and I'll help you diagnose and fix it!",
-            timestamp: new Date(),
-        },
-    ]);
+    const [messages, setMessages] = useState<Message[]>([]);
+
+    // Set initial welcome message on mount to avoid hydration mismatch
+    useEffect(() => {
+        setMessages([
+            {
+                role: "assistant",
+                content: "Hello! I'm MechGuide, your AI repair co-pilot. Point your camera at any machinery, and I'll help you diagnose and fix it!",
+                timestamp: new Date(),
+            },
+        ]);
+    }, []);
     const [input, setInput] = useState("");
     const [isListening, setIsListening] = useState(false);
     const [isSpeaking, setIsSpeaking] = useState(true);
@@ -167,14 +172,14 @@ export default function ChatPanel({ onSendMessage, voiceGuidance, isProcessing }
                     <div className="w-8 h-8 rounded-full bg-gradient-to-r from-blue-500 to-purple-600 flex items-center justify-center">
                         <Bot className="w-4 h-4 text-white" />
                     </div>
-                    <div>
-                        <h3 className="font-semibold text-white">MechGuide AI</h3>
+                    <div className="min-w-0">
+                        <h3 className="font-semibold text-white text-sm md:text-base truncate">MechGuide AI</h3>
                         <div className="flex items-center gap-1.5">
-                            <span className="relative flex h-2 w-2">
+                            <span className="relative flex h-2 w-2 flex-shrink-0">
                                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
                                 <span className="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
                             </span>
-                            <p className="text-xs text-green-400">Online</p>
+                            <p className="text-xs text-green-400 truncate">Online</p>
                         </div>
                     </div>
                 </div>
