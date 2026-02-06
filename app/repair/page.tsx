@@ -65,7 +65,7 @@ export default function RepairPage() {
     // ... (keep existing effects)
 
     return (
-        <div className="flex flex-col h-screen overflow-hidden bg-black text-white">
+        <div className="flex flex-col h-[100dvh] overflow-hidden bg-black text-white">
             {/* Header */}
             <header className="fixed top-0 left-0 right-0 z-50 px-4 py-3 border-b border-white/5 bg-black/50 backdrop-blur-md">
                 <div className="w-full max-w-[1920px] mx-auto flex items-center justify-between">
@@ -178,12 +178,14 @@ export default function RepairPage() {
 
                             {/* Repair Steps */}
                             <div className={`${activeTab === "steps" ? "flex" : "hidden"} lg:flex lg:h-1/3 min-h-0 flex-col`}>
-                                <div className="h-full relative rounded-2xl overflow-hidden glass-card">
-                                    <RepairSteps
-                                        steps={repairSteps}
-                                        currentStep={currentStep}
-                                        onStepComplete={handleStepComplete}
-                                    />
+                                <div className="h-full relative rounded-2xl overflow-hidden glass-card flex flex-col">
+                                    <div className="flex-1 overflow-y-auto scrollbar-thin p-1">
+                                        <RepairSteps
+                                            steps={repairSteps}
+                                            currentStep={currentStep}
+                                            onStepComplete={handleStepComplete}
+                                        />
+                                    </div>
                                 </div>
                             </div>
                         </div>

@@ -270,7 +270,7 @@ export default function ChatPanel({ onSendMessage, voiceGuidance, isProcessing }
             </div>
 
             {/* Premium Input */}
-            <div className="p-4 border-t border-white/10 bg-black/20">
+            <div className="p-4 pb-6 md:pb-4 border-t border-white/10 bg-black/20">
                 <div className="flex gap-2">
                     <motion.button
                         whileTap={{ scale: 0.95 }}
@@ -295,7 +295,7 @@ export default function ChatPanel({ onSendMessage, voiceGuidance, isProcessing }
                         whileHover={{ scale: 1.02 }}
                         onClick={handleSend}
                         disabled={!input.trim() || isProcessing}
-                        className="p-3 bg-gradient-to-r from-blue-500 to-purple-600 rounded-xl disabled:opacity-30 disabled:cursor-not-allowed hover:shadow-lg hover:shadow-blue-500/30 transition-all duration-300"
+                        className="p-3 bg-gradient-to-r from-blue-500 to-purple-600 rounded-xl disabled:opacity-30 disabled:cursor-not-allowed hover:shadow-lg hover:shadow-blue-500/30 transition-all duration-300 flex-shrink-0"
                     >
                         <Send className="w-5 h-5 text-white" />
                     </motion.button>
