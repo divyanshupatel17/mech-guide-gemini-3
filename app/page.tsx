@@ -12,6 +12,28 @@ export default function Home() {
       <PolygonBackground />
 
       <div className="min-h-screen flex flex-col relative z-10">
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "SoftwareApplication",
+              "name": "MechGuide",
+              "applicationCategory": "UtilitiesApplication",
+              "operatingSystem": "Any",
+              "offers": {
+                "@type": "Offer",
+                "price": "0",
+                "priceCurrency": "USD"
+              },
+              "description": "Real-time AR diagnostics, voice guidance, and smart repair checklists powered by Gemini 3.",
+              "author": {
+                "@type": "Person",
+                "name": "Divyanshu Patel"
+              }
+            })
+          }}
+        />
         {/* Navigation */}
         <nav className="glass fixed top-0 left-0 right-0 z-50 px-6 py-4 border-b border-white/5">
           <div className="max-w-7xl mx-auto flex items-center justify-between">
