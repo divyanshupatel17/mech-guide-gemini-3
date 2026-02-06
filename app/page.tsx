@@ -146,9 +146,15 @@ export default function Home() {
 
         {/* Footer */}
         <footer className="glass border-t border-white/5 py-6 px-6 text-center text-sm text-gray-600">
-          <div className="flex items-center justify-center gap-2">
-            <Shield className="w-4 h-4" />
-            Built for the Gemini 3 Hackathon 2026
+          <div className="flex flex-col md:flex-row items-center justify-center gap-2 md:gap-6 text-gray-500">
+            <div className="flex items-center gap-2">
+              <Shield className="w-4 h-4" />
+              <span>Built for Gemini 3 Hackathon 2026</span>
+            </div>
+            <div className="hidden md:block w-1.5 h-1.5 rounded-full bg-white/10" />
+            <div>
+              Team Lead: <span className="text-gray-400 font-medium">Divyanshu Patel</span>
+            </div>
           </div>
         </footer>
       </div>

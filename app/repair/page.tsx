@@ -83,9 +83,9 @@ export default function RepairPage() {
 
             {/* Main Content */}
             <main className="flex-1 pt-16 pb-4 px-4 h-full relative z-10">
-                <div className="w-full max-w-[1920px] mx-auto grid grid-cols-1 lg:grid-cols-12 gap-4 h-full">
-                    {/* Left Column - Camera (8 cols) */}
-                    <div className="lg:col-span-8 flex flex-col gap-4 h-full min-h-0">
+                <div className="w-full max-w-[1920px] mx-auto flex flex-col lg:grid lg:grid-cols-12 gap-4 h-full">
+                    {/* Left Column - Camera (Mobile: 45vh, Desktop: 8 cols) */}
+                    <div className="h-[45vh] lg:h-full lg:col-span-8 flex flex-col gap-4 min-h-0">
                         <motion.div
                             initial={{ opacity: 0, scale: 0.95 }}
                             animate={{ opacity: 1, scale: 1 }}
@@ -106,14 +106,14 @@ export default function RepairPage() {
                                 <motion.div
                                     initial={{ opacity: 0, y: 20 }}
                                     animate={{ opacity: 1, y: 0 }}
-                                    className="glass-card p-5 border-l-4 border-l-blue-500"
+                                    className="glass-card p-3 lg:p-5 border-l-4 border-l-blue-500 absolute lg:static top-4 left-4 right-4 z-20 lg:z-auto"
                                 >
                                     <div className="flex items-start justify-between gap-4">
                                         <div>
                                             <h4 className="font-semibold mb-1 text-white flex items-center gap-2">
                                                 Diagnosis <span className="text-xs text-gray-500 font-normal uppercase tracking-wider">AI Analysis</span>
                                             </h4>
-                                            <p className="text-gray-300 leading-relaxed text-sm">{diagnosis.summary}</p>
+                                            <p className="text-gray-300 leading-relaxed text-sm line-clamp-2 lg:line-clamp-none">{diagnosis.summary}</p>
                                         </div>
                                         <div className="flex flex-col items-end gap-2">
                                             <div className={`px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider ${diagnosis.severity === "critical" ? "bg-red-500/20 text-red-400 border border-red-500/30" :
@@ -145,7 +145,7 @@ export default function RepairPage() {
                                     initial={{ opacity: 0, y: 10 }}
                                     animate={{ opacity: 1, y: 0 }}
                                     exit={{ opacity: 0, y: 10 }}
-                                    className="glass-card p-4 border-red-500/30 flex items-center gap-3 text-red-400 bg-red-500/5"
+                                    className="glass-card p-4 border-red-500/30 flex items-center gap-3 text-red-400 bg-red-500/5 absolute lg:static bottom-4 left-4 right-4 z-20 lg:z-auto"
                                 >
                                     <AlertCircle className="w-5 h-5 flex-shrink-0" />
                                     <div>
@@ -157,8 +157,8 @@ export default function RepairPage() {
                         </AnimatePresence>
                     </div>
 
-                    {/* Right Column - Chat & Steps (4 cols) */}
-                    <div className="lg:col-span-4 flex flex-col gap-4 h-full min-h-0">
+                    {/* Right Column - Chat & Steps (Mobile: Remaining height, Desktop: 4 cols) */}
+                    <div className="flex-1 lg:h-full lg:col-span-4 flex flex-col gap-4 min-h-0 overflow-hidden">
                         <motion.div
                             initial={{ opacity: 0, x: 20 }}
                             animate={{ opacity: 1, x: 0 }}
@@ -175,7 +175,7 @@ export default function RepairPage() {
                             initial={{ opacity: 0, x: 20 }}
                             animate={{ opacity: 1, x: 0 }}
                             transition={{ delay: 0.1 }}
-                            className="h-1/3 min-h-[200px]"
+                            className="h-1/3 min-h-[150px] lg:min-h-[200px]"
                         >
                             <div className="h-full overflow-y-auto scrollbar-thin rounded-2xl">
                                 <RepairSteps
